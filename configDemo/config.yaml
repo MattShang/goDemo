@@ -1,0 +1,154 @@
+# 项目名称
+app:
+  name: "my-go-web-app"
+  version: "1.0.0"
+  env: "production"  # 环境：development, staging, production
+  debug: false  # 是否开启调试模式
+
+# 服务器配置
+server:
+  host: "0.0.0.0"  # 监听地址
+  port: 8080  # 监听端口
+  read_timeout: 30s  # 读取超时时间
+  write_timeout: 30s  # 写入超时时间
+  idle_timeout: 120s  # 空闲连接超时时间
+  tls:  # TLS 配置
+    enabled: true
+    cert_file: "/path/to/cert.pem"
+    key_file: "/path/to/key.pem"
+
+# 数据库配置
+database:
+  primary:  # 主数据库
+    driver: "mysql"
+    host: "db-primary.example.com"
+    port: 3306
+    user: "root"
+    password: "securepassword"
+    name: "myapp_production"
+    max_open_conns: 100  # 最大连接数
+    max_idle_conns: 10   # 最大空闲连接数
+    conn_max_lifetime: "5m"  # 连接最大生命周期
+  replica:  # 从数据库（用于读操作）
+    driver: "mysql"
+    host: "db-replica.example.com"
+    port: 3306
+    user: "readonly"
+    password: "readonlypassword"
+    name: "myapp_production"
+    max_open_conns: 50
+    max_idle_conns: 5
+    conn_max_lifetime: "5m"
+
+# 缓存配置
+cache:
+  redis:  # Redis 缓存
+    host: "redis.example.com"
+    port: 6379
+    password: "redispassword"
+    db: 0
+    pool_size: 20  # 连接池大小
+    max_retries: 3  # 最大重试次数
+    dial_timeout: "5s"  # 连接超时时间
+    read_timeout: "3s"  # 读取超时时间
+    write_timeout: "3s"  # 写入超时时间
+  local:  # 本地缓存
+    size: 10000  # 缓存项数量
+    default_expiration: "10m"  # 默认过期时间
+
+# 日志配置
+logging:
+  level: "info"  # 日志级别：debug, info, warn, error, fatal
+  format: "json"  # 日志格式：json, text
+  output: "file"  # 输出方式：file, stdout
+  file:  # 文件日志配置
+    path: "/var/log/myapp/app.log"
+    max_size: 100  # 单个日志文件最大大小（MB）
+    max_backups: 10  # 最大备份文件数
+    max_age: 30  # 日志文件保留天数
+    compress: true  # 是否压缩备份文件
+
+# 监控与追踪
+monitoring:
+  prometheus:  # Prometheus 监控
+    enabled: true
+    path: "/metrics"  # 暴露的路径
+  tracing:  # 分布式追踪
+    enabled: true
+    provider: "jaeger"  # 支持 jaeger, zipkin
+    jaeger:  # Jaeger 配置
+      endpoint: "http://jaeger.example.com:14268/api/traces"
+      service_name: "my-go-web-app"
+      sampler_type: "const"  # 采样类型：const, probabilistic, ratelimiting
+      sampler_param: 1  # 采样参数
+
+# 认证与授权
+auth:
+  jwt:  # JWT 配置
+    secret: "supersecretkey"
+    issuer: "my-go-web-app"
+    audience: "myapp-users"
+    expiration: "24h"  # Token 过期时间
+  oauth:  # OAuth 配置
+    google:  # Google OAuth
+      client_id: "google-client-id"
+      client_secret: "google-client-secret"
+      redirect_url: "https://myapp.example.com/auth/google/callback"
+    github:  # GitHub OAuth
+      client_id: "github-client-id"
+      client_secret: "github-client-secret"
+      redirect_url: "https://myapp.example.com/auth/github/callback"
+
+# 第三方服务集成
+third_party:
+  email:  # 邮件服务
+    provider: "smtp"  # 支持 smtp, sendgrid
+    smtp:  # SMTP 配置
+      host: "smtp.example.com"
+      port: 587
+      username: "user@example.com"
+      password: "smtppassword"
+      from: "noreply@example.com"
+  storage:  # 文件存储
+    provider: "s3"  # 支持 s3, local
+    s3:  # AWS S3 配置
+      region: "us-east-1"
+      bucket: "myapp-bucket"
+      access_key: "aws-access-key"
+      secret_key: "aws-secret-key"
+  payment:  # 支付服务
+    provider: "stripe"  # 支持 stripe, paypal
+    stripe:  # Stripe 配置
+      secret_key: "sk_test_1234567890"
+      webhook_secret: "whsec_1234567890"
+
+# 任务队列
+task_queue:
+  provider: "redis"  # 支持 redis, rabbitmq
+  redis:  # Redis 任务队列配置
+    host: "redis.example.com"
+    port: 6379
+    password: "redispassword"
+    db: 1
+    worker_pool_size: 10  # 工作池大小
+
+# 安全性配置
+security:
+  cors:  # CORS 配置
+    allowed_origins: ["https://myapp.example.com"]
+    allowed_methods: ["GET", "POST", "PUT", "DELETE"]
+    allowed_headers: ["Content-Type", "Authorization"]
+    allow_credentials: true
+  rate_limit:  # 速率限制
+    enabled: true
+    requests_per_second: 100  # 每秒请求数
+    burst: 50  # 突发请求数
+  csrf:  # CSRF 保护
+    enabled: true
+    token_length: 32  # Token 长度
+    secure_cookie: true  # 是否仅通过 HTTPS 传输
+
+# 功能开关
+feature_flags:
+  enable_new_ui: true  # 是否启用新 UI
+  enable_experimental_api: false  # 是否启用实验性 API

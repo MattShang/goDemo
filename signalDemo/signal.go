@@ -14,9 +14,10 @@ func main() {
 
 	// 注册要捕获的信号
 	// SIGINT - Ctrl + C
-	// SIGTERM - 系统终止，如 kill 命令等
+	// SIGTERM - 系统终止 [如 kill 命令是 terminated ]
 	// syscall.SIGKILL 命令无法捕获，因为它们是强制终止
-	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM) // ✅
+	// signal.Notify(sigChan, os.Interrupt)  // ❌
 
 	// 新开一个 goroutine 处理信号
 	go func() {
@@ -34,7 +35,7 @@ func main() {
 	}()
 
 	// 模拟主程序运行
-	fmt.Println("程序运行中...，按 Ctrl+C 退出")
+	fmt.Printf("PID: %d 程序运行中...，按 Ctrl+C 退出\n", os.Getpid())
 
 	// 使用 select 阻塞主程序
 	select {}
